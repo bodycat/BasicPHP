@@ -1,0 +1,20 @@
+[
+    {
+     "id": 1,
+     "title": "Iphone 6",
+     "quantity": 10,
+     "price": 25
+    },
+    {
+     "id": 2,
+     "title": "Iphone 4",
+     "quantity": 10,
+     "price": 25
+    },
+    {
+     "id": 3,
+     "title": "Зарядное устройство",
+     "quantity": 10,
+     "price": 25
+    }
+]

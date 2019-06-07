@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Cart</title>
+	<!-- https://www.bootstrapcdn.com/ -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<style>
+		div.cart {
+			margin-top: 50px;
+		}
+		input.quantity {
+			width: 20%;
+			float:left;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container cart" id="app">
+		<div class="row">
+<!-- div.container>div.row>div.col-md-8+div.col-md-4 -->
+			<div class="col-md-8">
+				<h1>Корзина</h1>
+<!-- table.table>thead>th*5 -->
+				<table class="table">
+					<thead>
+						<th>#</th>
+						<th>Название</th>
+						<th>Цена</th>
+						<th>Количество</th>
+						<th>Действия</th>
+					</thead>
+
+					<tbody>
+						<!-- <tr v-for="product in products"> -->
+						<tr v-for="(product, index) in products">
+							<!-- добавим нумерацию -->
+							<td>{{++index}}</td>
+							<td>{{product.title}}</td>
+							<td>{{product.price}}$</td>
+							<td>{{product.quantity}}</td>
+							<td>
+							<!-- input -->
+								<!-- <input type="text"> -->
+								<!-- <input type="text" class="form-control"> -->
+								<!-- <input type="number" class="form-control quantity "> -->
+							<!-- <input type="number" class="form-control quantity" v-model.quantity = "product.quantity"> -->
+								<input type="number" class="form-control quantity" v-model.quantity = "product.quantity">
+							<!-- button.btn.btn-danger -->
+								<button class="btn btn-danger">Удалить</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-4">
+				<h1>Новый товар</h1>
+				<!-- div.form-group>label{Название}> внутри -->
+				<!-- div.form-group>label{Название}> рядом + -->
+				<!-- div.form-group>label{Название}>+input.form-control -->
+				<div class="form-group">
+					<!-- label -->
+					<label for="">Название</label>
+					<!-- input.form-control -->
+					<input type="text" class="form-control">
+				</div>
+
+				<div class="form-group">
+					<!-- label -->
+					<label for="">Цена</label>
+					<!-- input.form-control -->
+					<input type="text" class="form-control">
+				</div>
+<!-- div.form-group>label{Название}+input.form-control -->
+				<!-- div.form-group>label{Название}>input.form-control -->
+				<!-- <div class="form-group"><label for="">Название<input type="text" class="form-control"></label></div> -->				
+
+				<!-- div.form-group>button.btn.btn-success{Добавить товар} -->
+				<!-- <div class="form-group"><button class="btn btn-success">Добавить товар</button></div> -->
+				<div class="form-group">
+					<button class="btn btn-success" @click="foo1()">Добавить товар</button>
+				</div>
+			</div>
+		</div>
+		<!-- {{totalQuantity}} -->
+		<h2>Количество товаров: {{totalQuantity}}</h2>
+			<!-- app.products[0].quantity = 15; -->
+		<!-- <h2>Общая стоимость: 45$</h2> -->
+		<h2>Общая стоимость: {{totalPrice}} $</h2>
+
+		<!-- теги -->
+		<!-- <span v-if="1 > 5"> awawa</span> -->
+		<!-- <span v-if="1 < 5"> awawa</span> -->
+		<!-- /теги -->
+		<!-- span.alert.alert-success -->		
+		<span class="alert alert-success" v-if="status">Заказ оформлен</span>
+		<!-- <span class="alert alert-success" v-if="!status">Заказ в процессе</span> -->
+
+		<!-- button.btn.btn-warning -->		
+		<!-- <button class="btn btn-warning" @click="makeOrder()">Оформить заказ</button> -->
+		<!-- <button class="btn btn-warning" @click="status=!status">Оформить заказ</button> -->
+		<button class="btn btn-warning" @click="makeOrder()">Оформить заказ</button>
+		<!-- <button class="btn btn-warning">Оформить заказ</button> -->
+	</div>
+	<!-- script:src -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script> -->
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js"></script>
+
+	<script>	
+		const app = new Vue({ 
+			el: '#app',
+			data: {
+				products: [
+					{
+						title: 'Iphone 6',
+						price: 25,
+						quantity: 10
+					},
+					{
+						title: 'Компьютер',
+						price: 40,
+						quantity: 5
+					},
+					{
+						title: 'Зарядное устройство',
+						price: 20,
+						quantity: 15
+					}
+				],
+				status: false
+			},
+
+			methods: {
+				foo1() {
+					alert('123');
+				},
+
+				makeOrder() {
+					// this.status = true;
+					this.status = !this.status;
+				}
+			},
+
+			// жизненный цикл
+			// зарезервированная функция в vue в отличие от methods:
+			mounted() {				
+				// буду загружать товары из сервера, БД, сервиса
+				// даём инициализацию данным, когда всё приложение запущено отрабатывается то что тут находится
+				// alert('Купи слона');
+			},
+
+			computed: {
+				totalQuantity() {
+					var total = 0;
+					this.products.forEach((product) => {total = total + 1*product.quantity;} );
+					return total;
+				},
+				// второй метод
+				// totalQuantity() {
+				// 	return this.products.reduce((total, product) => {
+				// 		// лайфхак - изменил тип умножением на 1, так убирается прикол со сложением символов
+				// 		return total + 1*product.quantity;
+				// 	}, 0);
+				// },				
+					// 0 - аккумулятор, как бы попадает в total=0
+					// откуда мы начинаем
+					// total + total у нас sum (идёт 1 продукт из массива)
+					// return sum 15
+					// в итоге в sum попадает 0
+					// они проходят наш callBack return sum + product.quantity 
+					// допустим содержит число 15
+					// прибавились и вернулись наверх в this.products.reduce((SUM, product))
+					// в SUM, здесь уже 15. А второй элемент product содержит в 
+					// product.quantity число 5. Прибавляем, получаем 20 и т.д 
+					// до конца массива
+// 10 * 5 = 50
+				// аналог в PHP reduce работает чуть иначе
+					// $products = [1,2,3,4];
+					// передаём в редюс массив продуктс, вторым элементом коллбэк function(){какой-то}, третий - инициализация - с 0
+					// return array_reduce($products, function($sum, $product) {
+					// 	return $sum + $product-> price * $product->quantity;
+					// },0);
+
+				totalPrice() {				
+					return this.products.reduce((sum, product) => {
+						return sum + product.price * product.quantity;
+					}, 0);
+				},
+			}
+		});
+	</script>
+
+<!-- 	<input v-model="form.sale_quantity" @change="computed" type="number" class="form-control" 
+	name="sale_quantity" id="sale_quantity" placeholder="Quantity">
+
+	<input v-model="form.sale_rate" @change="computed" type="number" step="any" class="form-control" name="sale_rate" id="sale_rate" placeholder="Rate">
+
+	<input v-model="form.sale_total" type="number" step="any" class="form-control" 
+	name="sale_total" id="sale_total" placeholder="Total Price"> -->
+
+
+</body>
+</html>
+
+<!-- https://cdnjs.com/libraries/vue -->
